@@ -21,4 +21,6 @@ curl -X POST http://localhost:8000/user?id={ユーザID}\&username={ユーザ名
 #### データ検索
 以下の形式で、ユーザ名をキーに、ヒットしたユーザ全員をJSON形式で取得できる。
 ユーザ名は曖昧検索で検索される。
+```
 curl -X GET http://localhost:8000/user?username={検索語}
+```
