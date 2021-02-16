@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge                                   # Web API用のネットワークを用意する
+
+services:
+
+  db:
+    build: ./mysql                                   # mysqlフォルダのDockerfileを使う
+    ports:
+      - 3306:3306                                    # ポートフォワード
+    volumes:
+      - ./mysql/data:/var/lib/mysql                  # データのマウント (マウントすることで、コンテナを消しても保持できる)
+      - ./mysql/sqls:/docker-entrypoint-initdb.d     # 初回起動時、docker-entrypoint-init.db.dのsqlが自動実行される
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}   # rootユーザのパスワード
+    networks:
+      - app-tier                                     # APと同じネットワークを設定
+
+  app:
+    build: ./flask                                   # flaskフォルダのDockerfileを使う
+    ports:
+      - 8000:8000                                    # ポートフォワード
+    volumes:
+      - ./flask/app:/var/python_apps                 # スクリプトのマウント
+    depends_on:
+      - db                                           # dbコンテナ起動後に実行 (起動前でもいいが、一応)
+    networks:
+      - app-tier                                     # DBと同じネットワークを設定
+
