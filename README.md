@@ -9,6 +9,8 @@ cd {クローンしたフォルダ}
 docker-compose build
 docker-compose up -d
 ```
+また、docker-compose buildをする前に、.envファイルを作成し、
+MYSQL_ROOT_PASSWORDを設定する必要がある。
 
 ### API仕様
 #### データ登録
